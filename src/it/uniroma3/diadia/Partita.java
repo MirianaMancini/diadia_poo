@@ -17,18 +17,21 @@ import it.uniroma3.diadia.giocatore.Giocatore;
 public class Partita {
 	private Stanza stanzaCorrente;
 	private Stanza stanzaVincente;
-	private boolean finita;
-	private Labirinto labirinto;
 	private Giocatore giocatore;
-		
-	public Partita(){
+	private int cfu;
+	private static int CFU_INIZIALI = 20;		//non può essere modificata
+	
+	private boolean finita;
+	
+	public Partita(Labirinto labirinto){
 		//Si crea il labirinto per questa Partita
-		this.labirinto = new Labirinto();
 		this.stanzaCorrente = labirinto.getStanzaIniziale(); 	//all' inizio la stanza corrente è l'ingresso al labirinto
 		this.stanzaVincente = labirinto.getStanzaFinale();		//la stanza vincente è la stanza finale del labirinto
+		
 		//Si crea il giocatore per questa Partita
 		this.giocatore = new Giocatore();
-		
+		//in questa partita il giocatore ha 20 cfu iniziali
+		this.cfu = CFU_INIZIALI;
 		this.finita = false;
 	}
 
@@ -49,11 +52,16 @@ public class Partita {
 		return this.giocatore;
 	}
 	
-	public Labirinto getLabirinto() {
-		return this.labirinto;
+	/*Gestione Cfu*/
+	public int getCfu() {
+		return this.cfu;
 	}
-	
-	
+
+	public void setCfu(int cfu) {
+		this.cfu = cfu;		
+	}
+		
+		
 	/**
 	 * Restituisce vero se e solo se la partita e' stata vinta
 	 * @return vero se partita vinta
@@ -67,7 +75,7 @@ public class Partita {
 	 * @return vero se partita finita
 	 */
 	public boolean isFinita() {
-		return finita || vinta() || (this.giocatore.getCfu() == 0);
+		return finita || vinta() || (this.cfu == 0);
 	}
 
 	/**
@@ -78,14 +86,7 @@ public class Partita {
 		this.finita = true;
 	}
 	
-	
-	/**
-	 * Restituisce i Cfu relativi al Giocatore di questa Partita
-	 */
-	public int getCfuPartita() {
-		return this.giocatore.getCfu();
-	}
-	
+		
 	public Borsa getBorsaGiocatore() {
 		return this.giocatore.getBorsa();
 	}
@@ -95,6 +96,6 @@ public class Partita {
 	 * ovvero ha ancora mosse a disposizione
 	 */
 	public boolean ancoraInGioco() {
-		return this.giocatore.getCfu()>0;
+		return this.getCfu()>0;
 	}
 }

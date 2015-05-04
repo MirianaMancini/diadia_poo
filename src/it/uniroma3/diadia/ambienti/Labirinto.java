@@ -8,36 +8,26 @@ import it.uniroma3.diadia.attrezzi.Attrezzo;
 public class Labirinto {
 	private Stanza stanzaIniziale;
 	private Stanza stanzaFinale;		//è la stanza vincente della Partita
-	private static final String MESSAGGIO_BENVENUTO = 
-			"Ti trovi nell'Universita', ma oggi e' diversa dal solito...\n" +
-			"Meglio andare al piu' presto in biblioteca a studiare. Ma dov'e'?\n"+
-			"I locali sono popolati da strani personaggi, " +
-			"alcuni amici, altri... chissa!\n"+
-			"Ci sono attrezzi che potrebbero servirti nell'impresa:\n"+
-			"puoi raccoglierli, usarli, posarli quando ti sembrano inutili\n" +
-			"o regalarli se pensi che possano ingraziarti qualcuno.\n\n"+
-			"Per conoscere le istruzioni usa il comando 'aiuto'.";
 	
 	public Labirinto(){
-		System.out.println(MESSAGGIO_BENVENUTO);
-		init();				//crea il labirinto per iniziare il gioco
+		creaStanze();				//crea il labirinto per iniziare il gioco
 	}
 	
 	/**
 	 * Crea tutte le stanze e le porte di collegamento
 	 * Inizializza il labirinto
 	 */
-	private void init() {
+	private void creaStanze() {
 		/* crea gli attrezzi */
     	Attrezzo lanterna = new Attrezzo("lanterna",3);
 		Attrezzo osso = new Attrezzo("osso",1);
-		Attrezzo falce = new Attrezzo("falce", 7);
-    	
+		Attrezzo chiave = new Attrezzo("chiave", 2);
+		
 		/* crea stanze del labirinto */
-		Stanza atrio = new Stanza("Atrio");
-		Stanza aulaN11 = new Stanza("Aula N11");
-		Stanza aulaN10 = new Stanza("Aula N10");
-		Stanza laboratorio = new Stanza("Laboratorio Campus");
+		Stanza atrio = new StanzaBloccata("Atrio", "nord", "chiave");
+		Stanza aulaN11 = new StanzaMagica("Aula N11", 2);	//AULA N11 E' LA STANZA MAGICA con soglia default
+		Stanza aulaN10 = new StanzaBuia("Aula N10", "lanterna");	//AULA N10 E' LA STANZA BUIA  
+		Stanza laboratorio = new Stanza("Laboratorio Campus");	
 		Stanza biblioteca = new Stanza("Biblioteca");
 		
 		/* collega le stanze */
@@ -57,14 +47,22 @@ public class Labirinto {
         /* pone gli attrezzi nelle stanze */
 		aulaN10.addAttrezzo(lanterna);
 		atrio.addAttrezzo(osso);
-		aulaN11.addAttrezzo(falce);
-		
+		laboratorio.addAttrezzo(chiave);
+				
 		// il gioco comincia nell'atrio e la biblioteca è la stanza vincente
 		this.stanzaIniziale = atrio;
 		this.stanzaFinale = biblioteca;
 		
 	}
 	
+	public void setStanzaIniziale(Stanza stanzaIniziale) {
+		this.stanzaIniziale = stanzaIniziale;
+	}
+
+	public void setStanzaFinale(Stanza stanzaFinale) {
+		this.stanzaFinale = stanzaFinale;
+	}
+
 	public Stanza getStanzaIniziale() {
 		return this.stanzaIniziale;
 	}
