@@ -2,23 +2,25 @@ package it.uniroma3.diadia.comandi;
 
 import it.uniroma3.diadia.Partita;
 
-public class ComandoAiuto implements Comando {
+/*togliamo implements Comando e usiamo extends AbstractComando
+  eredita il metodo setParametro con corpo vuoto*/
+
+public class ComandoAiuto extends AbstractComando {
 	
-	private static String[] elencoComandi = {"guarda", "vai", "prendi", "posa", "aiuto", "fine"};
+	private static String[] elencoComandi = {"guarda", "vai", "prendi", "posa", "interagisci", "saluta", "regala", "aiuto", "fine"};
 
 	/**
 	 * Stampa informazioni di aiuto.
 	 */
 	@Override
-	public void esegui(Partita partita) {
-		for(int i=0; i< elencoComandi.length; i++) 
-			System.out.print(elencoComandi[i]+" ");
-		System.out.println();
+	public String esegui(Partita partita) {
+		StringBuilder msg = new StringBuilder();
+		
+		for(int i=0; i< elencoComandi.length; i++) {
+			msg.append(elencoComandi[i]+" ");
+		}
+		return msg.toString();
 	}
 
-	@Override
-	public void setParametro(String parametro) {
-		//corpo vuoto: Comando aiuto() non ha parametri
-	}
 
 }

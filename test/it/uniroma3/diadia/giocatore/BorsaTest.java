@@ -61,11 +61,11 @@ public class BorsaTest {
 
 	@Test
 	public void testToString() {
-		assertEquals("Contenuto borsa (1kg/8kg): corda (1kg) ", this.borsa.toString());
+		assertEquals("Contenuto borsa (1kg/8kg): \nordinato per nome: corda (1kg) \nordinato per peso: corda (1kg) ", this.borsa.toString());
 		Attrezzo spada = new Attrezzo("spada", 5);
 		this.borsa.addAttrezzo(spada);
-		//toString() stampa contenuto della borsa ordinato per peso
-		assertEquals("Contenuto borsa (6kg/8kg): corda (1kg) spada (5kg) ", this.borsa.toString());
+		//toString() stampa contenuto della borsa ordinato per nome e per peso
+		assertEquals("Contenuto borsa (6kg/8kg): \nordinato per nome: corda (1kg) spada (5kg) \nordinato per peso: corda (1kg) spada (5kg) ", this.borsa.toString());
 	}
 	
 	@Test 

@@ -11,31 +11,32 @@ import it.uniroma3.diadia.giocatore.Borsa;
  * @param nomeattrezzo
  */
 
-public class ComandoPosa implements Comando {
-	private String nomeAttrezzo;
+public class ComandoPosa implements Comando  {
+	private String nomeAttrezzoDaPosare; 
 	
 	@Override
-	public void esegui(Partita partita) {
-		if(!(partita.getBorsaGiocatore().hasAttrezzo(nomeAttrezzo))){
-    		System.out.println("Attrezzo non presente nella borsa!");
-    		return;
+	public String esegui(Partita partita) {
+		StringBuilder msg = new StringBuilder();
+		if(!(partita.getBorsaGiocatore().hasAttrezzo(this.nomeAttrezzoDaPosare))){
+    		msg.append("Attrezzo non presente nella borsa!");
+    		return msg.toString();
     	}
-    	//l'attrezzo è presente nella borsa del giocatore
-    	Stanza corrente = partita.getStanzaCorrente();
+       	Stanza corrente = partita.getStanzaCorrente();
     	Borsa borsaGiocatore = partita.getBorsaGiocatore();
     	//Variante: removeAttrezzo di borsa restituisce l'attrezzo restituito
-    	Attrezzo daPosare = borsaGiocatore.removeAttrezzo(nomeAttrezzo);
+       	Attrezzo daPosare = borsaGiocatore.removeAttrezzo(this.nomeAttrezzoDaPosare);
     	if(daPosare!=null){
     	   	if(corrente.addAttrezzo(daPosare)){
-    	   		System.out.println("Attrezzo Posato!");
-    	   		System.out.println(borsaGiocatore.toString());
+    	   		msg.append("Attrezzo Posato!\n");
+    	   		msg.append(borsaGiocatore.toString());
      	   	}
     	}
+    	return msg.toString();
 	}
 
 	@Override
 	public void setParametro(String parametro) {
-		this.nomeAttrezzo = parametro;
+		this.nomeAttrezzoDaPosare = parametro;
 	}
-
+	
 }

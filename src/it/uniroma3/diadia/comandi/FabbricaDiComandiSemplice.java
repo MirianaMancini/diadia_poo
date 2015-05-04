@@ -1,20 +1,22 @@
 package it.uniroma3.diadia.comandi;
 
 import java.util.Scanner;
-import it.uniroma3.diadia.comandi.Comando;
 
 public class FabbricaDiComandiSemplice implements FabbricaDiComandi {
 
 	@Override
 	public Comando costruisciComando(String istruzione) {
+		@SuppressWarnings("resource")
+		
 		Scanner scannerDiParole = new Scanner(istruzione);
 		String nomeComando = null;
 		String parametro = null;
 		Comando comando = null;
+		
 		if (scannerDiParole.hasNext())
-			nomeComando = scannerDiParole.next(); // prima parola: nome del comando
+			nomeComando = scannerDiParole.next(); 	// prima parola: nome del comando
 		if (scannerDiParole.hasNext())
-			parametro = scannerDiParole.next();// seconda parola: eventuale parametro
+			parametro = scannerDiParole.next();		// seconda parola: eventuale parametro
 		if (nomeComando == null)
 			comando = new ComandoNonValido();
 		else if (nomeComando.equals("vai"))
@@ -29,11 +31,19 @@ public class FabbricaDiComandiSemplice implements FabbricaDiComandi {
 			comando = new ComandoFine();
 		else if (nomeComando.equals("guarda"))
 			comando = new ComandoGuarda();
-		else 
+		else if (nomeComando.equals("interagisci"))
+			comando = new ComandoInteragisci();
+		else if (nomeComando.equals("saluta"))
+			comando = new ComandoSaluta();
+		else if (nomeComando.equals("regala"))
+			comando = new ComandoRegala();
+		else
 			comando = new ComandoNonValido();
 		
 		comando.setParametro(parametro);
-		
+			
+//		scannerDiParole.close();
+	
 		return comando;
 	}
 

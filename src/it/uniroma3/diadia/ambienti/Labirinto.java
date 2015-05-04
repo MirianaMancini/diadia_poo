@@ -1,6 +1,12 @@
 package it.uniroma3.diadia.ambienti;
 
+import java.io.FileNotFoundException;
+
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.personaggi.Cane;
+import it.uniroma3.diadia.personaggi.Mago;
+import it.uniroma3.diadia.personaggi.Strega;
+import it.uniroma3.diadia.ambienti.FormatoFileNonValidoException;
 
 /**
  * Questa classe si occupa della creazione del labirinto
@@ -10,7 +16,21 @@ public class Labirinto {
 	private Stanza stanzaFinale;		//è la stanza vincente della Partita
 	
 	public Labirinto(){
-		creaStanze();				//crea il labirinto per iniziare il gioco
+		creaStanze();					//crea il labirinto attraverso il metodo creaStanze()
+	}
+	
+	/*NB: Labirinto invoca metodi che posso lanciare eccezioni Checked e deve perciò gestrile */
+	
+	public Labirinto(String nomeFile) throws FileNotFoundException {			
+		CaricatoreLabirinto c = new CaricatoreLabirinto(nomeFile);
+		try {
+			c.carica();									//crea il labirinto caricandolo da file
+		} catch (FormatoFileNonValidoException e) {
+			e.printStackTrace();
+			return;
+		}
+		this.stanzaIniziale = c.getStanzaIniziale();
+		this.stanzaFinale = c.getStanzaVincente();
 	}
 	
 	/**
@@ -22,6 +42,14 @@ public class Labirinto {
     	Attrezzo lanterna = new Attrezzo("lanterna",3);
 		Attrezzo osso = new Attrezzo("osso",1);
 		Attrezzo chiave = new Attrezzo("chiave", 2);
+		Attrezzo dono = new Attrezzo("bacchetta", 2);
+		Attrezzo spada = new Attrezzo("spada", 4);
+		Attrezzo regalo = new Attrezzo("corda",3);
+				
+		/* crea personaggi */
+		Mago mago = new Mago("Merlino", "Ho un dono da darti!", dono);
+		Cane cane = new Cane("Fido", "Bau Bau!", "osso", regalo);
+		Strega strega = new Strega("Morgana", "Sono una potente strega e posso trasferirti in una stanza adiacente!");
 		
 		/* crea stanze del labirinto */
 		Stanza atrio = new StanzaBloccata("Atrio", "nord", "chiave");
@@ -48,7 +76,13 @@ public class Labirinto {
 		aulaN10.addAttrezzo(lanterna);
 		atrio.addAttrezzo(osso);
 		laboratorio.addAttrezzo(chiave);
-				
+		laboratorio.addAttrezzo(spada);
+		
+		/* pone i personaggi nelle stanze */
+		atrio.setPersonaggio(mago);
+		aulaN10.setPersonaggio(cane);
+		aulaN11.setPersonaggio(strega);
+								
 		// il gioco comincia nell'atrio e la biblioteca è la stanza vincente
 		this.stanzaIniziale = atrio;
 		this.stanzaFinale = biblioteca;

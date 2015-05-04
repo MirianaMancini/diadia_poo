@@ -3,28 +3,30 @@ package it.uniroma3.diadia.comandi;
 import it.uniroma3.diadia.Partita;
 
 public class ComandoGuarda implements Comando {
-	private String nome;		//nome indica cosa guardare
+	private String nome;		
 	
 	@Override
-	public void esegui(Partita partita) {
+	public String esegui(Partita partita) {
+		StringBuilder msg = new StringBuilder();
 		if(this.nome==null){
-			System.out.println("Cosa vuoi guardare? (stanza - borsa)");
-			return;
+			msg.append("Cosa vuoi guardare? (stanza - borsa)");
+			return msg.toString();
 		}
 		if(this.nome.equals("stanza")){
-			System.out.println(partita.getStanzaCorrente().getDescrizione());
-			return;
+			msg.append(partita.getStanzaCorrente().getDescrizione());
+			return msg.toString();
 		}
 		if(this.nome.equals("borsa")){
-			System.out.println(partita.getBorsaGiocatore().toString());
-			return;
+			msg.append(partita.getBorsaGiocatore().toString());
+			return msg.toString();
 		}
-		System.out.println("Comando non Valido! (Puoi guarda la stanza corrente o la borsa)");
+		msg.append("Comando non Valido! (Puoi guarda la stanza corrente o la borsa)");
+		return msg.toString();
 	}
 
 	@Override
 	public void setParametro(String parametro) {
 		this.nome = parametro;	
 	}
-
+	
 }

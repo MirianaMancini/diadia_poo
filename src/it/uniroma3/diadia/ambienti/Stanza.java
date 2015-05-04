@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.personaggi.AbstractPersonaggio;
 
 
 /**
@@ -23,25 +24,46 @@ import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 public class Stanza {
 	private String nome;
-	
 	protected List<Attrezzo> attrezzi;			
-	
 	private Map<String, Stanza> stanzeAdiacenti;	//mappa che associa alle direzioni le stanze adicenti			
 			//OK: il tipo formale della chiave è String che per default implementa equals e hashCode
-    
+    private AbstractPersonaggio personaggio;
+	
+	
     /**
      * Crea una stanza. Non ci sono stanze adiacenti, non ci sono attrezzi.
      * @param nome il nome della stanza
      */
     public Stanza(String nome) {
         this.nome = nome;
-
         this.stanzeAdiacenti = new HashMap<String, Stanza>();
-        
-        this.attrezzi = new ArrayList<Attrezzo>(10);		
+        this.attrezzi = new ArrayList<Attrezzo>(10);
+        this.personaggio = null;
     }
     
+     
     /**
+     * Restituisce il nome della stanza.
+     * @return il nome della stanza
+     */
+    public String getNome() {
+        return this.nome;
+    }
+    
+    public AbstractPersonaggio getPersonaggio() {
+		return personaggio;
+	}
+
+	public void setPersonaggio(AbstractPersonaggio personaggio) {
+		this.personaggio = personaggio;
+	}
+	
+	public boolean hasPersonaggio() {
+		return this.personaggio!=null;
+	}
+	
+	
+	  /**
      * @return il numero di attrezzzi presenti nella stanza
      */
     public int numeroAttrezzi() {
@@ -56,15 +78,6 @@ public class Stanza {
      */
     public void impostaStanzaAdiacente(String direzione, Stanza stanza) {
     	this.stanzeAdiacenti.put(direzione, stanza);
-    }
- 
-    
-    /**
-     * Restituisce il nome della stanza.
-     * @return il nome della stanza
-     */
-    public String getNome() {
-        return this.nome;
     }
     
     /**
@@ -142,6 +155,38 @@ public class Stanza {
     }
 	
 	/**
+	 * Restituisce a partire da questa stanza, la stanza con meno attrezzi tra quelle Adiacenti
+	 */
+	public Stanza getStanzaAdicenteConMenoAttrezzi() {
+		Stanza stanzaConMenoAttrezzi = null;
+		int min = 100; 
+		for(String direzione : this.getDirezioni()){
+			if(this.getStanzaAdiacente(direzione).numeroAttrezzi() < min) {
+				min = this.getStanzaAdiacente(direzione).numeroAttrezzi();
+				stanzaConMenoAttrezzi = this.getStanzaAdiacente(direzione);
+			}
+		}
+		return stanzaConMenoAttrezzi;
+	}
+	
+	/**
+	 * Restituisce a partire da questa stanza, la stanza con più attrezzi tra quelle Adiacenti
+	 */
+	public Stanza getStanzaAdicenteConPiuAttrezzi() {
+		Stanza stanzaConPiuAttrezzi = null;
+		int max = 0; 
+		for(String direzione : this.getDirezioni()){
+			if(this.getStanzaAdiacente(direzione).numeroAttrezzi() > max) {
+				max = this.getStanzaAdiacente(direzione).numeroAttrezzi();
+				stanzaConPiuAttrezzi = this.getStanzaAdiacente(direzione);
+			}
+		}
+		return stanzaConPiuAttrezzi;
+	}
+	
+	
+	
+	/**
      * Restituisce la descrizione della stanza.
      * @return la descrizione della stanza
      */
@@ -160,15 +205,19 @@ public class Stanza {
     	StringBuilder s = new StringBuilder();
     	s.append(this.nome);
     	s.append("\nUscite: ");
-    	Set<String> direzioni = this.stanzeAdiacenti.keySet();	//non si può iterare una mappa
-    	for(String direzione : direzioni){						//iteriamo l'insieme delle sue chiavi
+    	//Set<String> direzioni = this.stanzeAdiacenti.keySet();	//non si può iterare una mappa iteriamo l'insieme delle sue chiavi
+    	for(String direzione : this.getDirezioni()){						
     		if(direzione!=null)
     			s.append(" " + direzione);	
     	}
     	s.append("\nAttrezzi nella stanza: ");
-    	for (Attrezzo attrezzo : this.attrezzi) {		//for-each vale anche per le collezioni
+    	for (Attrezzo attrezzo : this.getAttrezzi()) {		//for-each vale anche per le collezioni
     		if(attrezzo!=null)							//IMPORTANTE
     		    s.append(attrezzo.toString()+" ");
+    	}
+    	if(this.personaggio!=null){
+    		s.append("\nPersonaggio nella stanza: ");
+    		s.append(this.personaggio.toString());
     	}
     	return s.toString();
     }

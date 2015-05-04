@@ -9,29 +9,31 @@ import it.uniroma3.diadia.ambienti.Stanza;
  * @param String direzione
  */
 
-public class ComandoVai implements Comando {
+public class ComandoVai implements Comando  {
 	private String direzione;
 
 	@Override
-	public void esegui(Partita partita) {
+	public String esegui(Partita partita) {
+		StringBuilder msg = new StringBuilder();
 		Stanza stanzaCorrente = partita.getStanzaCorrente();
 		Stanza prossimaStanza = null;
 		if (this.direzione==null) {
-			System.out.println("Dove vuoi andare? Devi specificare una direzione");
-					return;
+			msg.append("Dove vuoi andare? Devi specificare una direzione");
+			return msg.toString();
 		}
 		prossimaStanza = stanzaCorrente.getStanzaAdiacente(this.direzione);
 		if (prossimaStanza==null) {
-			System.out.println("Direzione inesistente");
-			return;
+			msg.append("Direzione inesistente");
+			return msg.toString();
 		}
 		partita.setStanzaCorrente(prossimaStanza);
 		int cfu = partita.getCfu();
 		cfu--;
 		partita.setCfu(cfu);
-		System.out.println(partita.getStanzaCorrente().getNome());
+		msg.append(partita.getStanzaCorrente().getNome()+"\n");
 		if(!partita.vinta())
-			System.out.println("CFU: "+cfu+". (Hai ancora "+ cfu +" mosse a disposizione)");
+			msg.append("CFU: "+cfu+". (Hai ancora "+ cfu +" mosse a disposizione)");
+		return msg.toString();
 	}
 
 	@Override

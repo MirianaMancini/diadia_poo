@@ -111,4 +111,35 @@ public class StanzaTest {
 		assertFalse(this.stanza.removeAttrezzo(martello));
 	}
 	
+	@Test
+	public void testGetStanzaAdiacenteConMenoAttrezzi() {
+		Stanza principale= new Stanza("Atrio");
+		Stanza nord = new Stanza("nord");
+		Stanza sud = new Stanza("sud");
+		principale.impostaStanzaAdiacente("nord", nord);
+		principale.impostaStanzaAdiacente("sud", sud);
+		nord.addAttrezzo(ombrello);
+		nord.addAttrezzo(tappeto);
+		assertEquals(2, nord.numeroAttrezzi());
+		assertEquals(0, sud.numeroAttrezzi());			//meno attrezzi
+		assertEquals(sud, principale.getStanzaAdicenteConMenoAttrezzi());
+	}
+	
+	@Test
+	public void testGetStanzaAdiacenteConPiuAttrezzi() {
+		Stanza principale= new Stanza("Atrio");
+		Stanza nord = new Stanza("nord");
+		Stanza sud = new Stanza("sud");
+		principale.impostaStanzaAdiacente("nord", nord);
+		principale.impostaStanzaAdiacente("sud", sud);
+		nord.addAttrezzo(ombrello);
+		nord.addAttrezzo(tappeto);
+		assertEquals(2, nord.numeroAttrezzi());			//più attrezzi
+		assertEquals(0, sud.numeroAttrezzi());			
+		assertEquals(nord, principale.getStanzaAdicenteConPiuAttrezzi());
+	}
+	
+	
+	
+	
 }
