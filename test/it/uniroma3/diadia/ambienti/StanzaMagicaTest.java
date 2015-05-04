@@ -8,8 +8,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class StanzaMagicaTest {
+//	private Stanza lab;			CON STANZA TIPO STATICO I METODI PROPRI DI STANZAMAGICA NON COMPILANO
 	private StanzaMagica lab;
-
+	
 	private Attrezzo ombrello;
 	private Attrezzo tappeto;
 	private Attrezzo ascia;
@@ -55,11 +56,22 @@ public class StanzaMagicaTest {
 		lab.addAttrezzo(tappeto);	//due attrezzi posati
 		assertTrue(lab.hasAttrezzo("tappeto"));
 		//MAGIA ATTIVATA
+		assertEquals(3, this.ascia.getPeso());
 		lab.addAttrezzo(ascia);
 		//aggiunge ascia in lab attivando su ascia il comportamento magico
 		assertFalse(lab.hasAttrezzo("ascia"));
 		assertTrue(lab.hasAttrezzo("aicsa"));					//nome invertito
 		assertEquals(6, lab.getAttrezzo("aicsa").getPeso());	//peso raddoppiato
 	}
+	
+
+//NON SI PUO' TESTARE UN METODO PRIVATO PERCHE' NON ACCESSIBILE
+//	@Test
+//	public void testModificaAttrezzo() {
+//		Attrezzo attrezzo = new Attrezzo("corda",2);
+//		Attrezzo modificato = lab.modificaAttrezzo(attrezzo);
+//		assertEquals(4, modificato.getPeso());
+//		assertEquals("adroc", modificato.getNome());
+//	}
 
 }

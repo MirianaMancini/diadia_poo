@@ -26,14 +26,14 @@ public class StanzaBuia extends Stanza {
 
 	@Override
 	public String getDescrizione() {
-		String s = new String();
+		StringBuilder s = new StringBuilder();
 		if(!this.hasAttrezzo(nomeAttrezzoPerVedere)){		//se non è presente
-			s += this.getNome()+"\nQui c'è un buio pesto!";
-			s += "\nPer vedere cerca "+this.getNomeAttrezzoPerVedere()+" e posalo in questa stanza!";
+			s.append(this.getNome()+"\nQui c'è un buio pesto!");
+			s.append("\nPer vedere cerca "+this.getNomeAttrezzoPerVedere()+" e posalo in questa stanza!");
 		}
 		else
-			s += super.getDescrizione();
-		return s;
+			s.append(super.getDescrizione());
+		return s.toString();
 	}
 	
 }

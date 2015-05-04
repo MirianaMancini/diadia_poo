@@ -39,7 +39,7 @@ public class StanzaTest {
 	}
 	@Test
 	public void testToString() {
-		assertEquals("atrio\nUscite:  nord sud\nAttrezzi nella stanza: ombrello (2kg) tappeto (1kg) ", stanza.toString());
+		assertEquals("atrio\nUscite:  sud nord\nAttrezzi nella stanza: ombrello (2kg) tappeto (1kg) ", stanza.toString());
 	}
 	@Test
 	public void testGetStanzaAdiacente() {
@@ -55,7 +55,7 @@ public class StanzaTest {
 
 	@Test
 	public void testGetDescrizione() {
-		assertEquals("atrio\nUscite:  nord sud\nAttrezzi nella stanza: ombrello (2kg) tappeto (1kg) ", this.stanza.getDescrizione());
+		assertEquals("atrio\nUscite:  sud nord\nAttrezzi nella stanza: ombrello (2kg) tappeto (1kg) ", this.stanza.getDescrizione());
 	}
 
 	@Test
@@ -72,23 +72,27 @@ public class StanzaTest {
 	
 	@Test
 	public void testImpostaStanzaAdiacente() {
-		Stanza s = new Stanza("ufficio");
+		Stanza ufficio = new Stanza("ufficio");
 		//pre
-		assertEquals(bar, this.stanza.getStanzaAdiacente("nord"));
-		assertEquals(mensa, this.stanza.getStanzaAdiacente("sud"));
 		assertEquals(null, this.stanza.getStanzaAdiacente("est"));
-		this.stanza.impostaStanzaAdiacente("est", s);
-		assertEquals(s, this.stanza.getStanzaAdiacente("est"));
+		this.stanza.impostaStanzaAdiacente("est", ufficio);
+		assertEquals(ufficio, this.stanza.getStanzaAdiacente("est"));
 	}
 	
 	@Test
 	public void testAddAttrezzo() {
 		Attrezzo martello = new Attrezzo("martello", 1);
-		Attrezzo spada = new Attrezzo("spada", 2);
 		this.stanza.addAttrezzo(martello);
 		assertEquals(martello, this.stanza.getAttrezzo("martello"));
-		this.stanza.addAttrezzo(spada);
-		assertEquals(spada, this.stanza.getAttrezzo("spada"));
+	}
+	
+	@Test
+	public void testAddAttrezzoStessoNome(){
+		Attrezzo martello = new Attrezzo("martello", 1);
+		assertTrue(this.stanza.addAttrezzo(martello));
+		Attrezzo martello2 = new Attrezzo("martello",5);
+		//non si possono aggiungere due attrezzi con lo stesso nome
+		assertFalse(this.stanza.addAttrezzo(martello2));	
 	}
 	
 	@Test
@@ -106,4 +110,5 @@ public class StanzaTest {
 		Attrezzo martello = new Attrezzo("martello", 1);
 		assertFalse(this.stanza.removeAttrezzo(martello));
 	}
+	
 }

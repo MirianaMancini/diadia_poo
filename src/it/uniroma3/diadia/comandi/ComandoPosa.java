@@ -18,6 +18,7 @@ public class ComandoPosa implements Comando {
 	public void esegui(Partita partita) {
 		if(!(partita.getBorsaGiocatore().hasAttrezzo(nomeAttrezzo))){
     		System.out.println("Attrezzo non presente nella borsa!");
+    		return;
     	}
     	//l'attrezzo è presente nella borsa del giocatore
     	Stanza corrente = partita.getStanzaCorrente();

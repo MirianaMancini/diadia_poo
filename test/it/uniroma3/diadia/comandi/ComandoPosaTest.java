@@ -35,5 +35,20 @@ public class ComandoPosaTest {
 		assertFalse(this.partita.getBorsaGiocatore().hasAttrezzo("spada"));
 		assertTrue(this.partita.getStanzaCorrente().hasAttrezzo("spada"));
 	}
+	
+	@Test
+	public void testEseguiComandoPosa_AttrezzoNonPresente() {
+		Attrezzo corda = new Attrezzo("corda", 2);
+		this.partita.getStanzaCorrente().addAttrezzo(corda);
+		assertFalse(this.partita.getBorsaGiocatore().hasAttrezzo("corda"));
+		assertTrue(this.partita.getStanzaCorrente().hasAttrezzo("corda"));
+		//corda non presente in borsa non può essere posata!
+		FabbricaDiComandi factory = new FabbricaDiComandiSemplice();
+		Comando comando = factory.costruisciComando("posa corda");
+		comando.esegui(this.partita);
+		assertFalse(this.partita.getBorsaGiocatore().hasAttrezzo("corda"));
+		assertTrue(this.partita.getStanzaCorrente().hasAttrezzo("corda"));
+		
+	}
 
 }

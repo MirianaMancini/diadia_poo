@@ -42,21 +42,20 @@ public class StanzaBloccata extends Stanza {
 				return this;			   //	<-------- ritorna questa stanza che è quella corrente
 			}
 		}
-		Stanza stanza = super.getStanzaAdiacente(direzione);
-		return stanza;
+		return super.getStanzaAdiacente(direzione);
 	}
 	
 	@Override
 	public String getDescrizione() {
-		String s = new String();
-    	s += super.getDescrizione();
-    	s += "\nDirezione bloccata: " + this.getDirezioneBloccata();
+		StringBuilder s = new StringBuilder();
+    	s.append( super.getDescrizione() );
+    	s.append("\nDirezione bloccata: " + this.getDirezioneBloccata());
     	    	
     	if(this.hasAttrezzo(nomeAttrezzoChiave))
-    		s += "\n"+this.getNomeAttrezzoChiave()+" presente nella stanza. Puoi andare nella direzione bloccata";
+    		s.append("\n"+this.getNomeAttrezzoChiave()+" presente nella stanza. Puoi andare nella direzione bloccata");
     	else
-    		s += "\nCerca l'oggetto " + this.getNomeAttrezzoChiave() + " e posalo in questa stanza!";
-    	return s;
+    		s.append("\nCerca l'oggetto " + this.getNomeAttrezzoChiave() + " e posalo in questa stanza!");
+    	return s.toString();
 	}
 	
 }

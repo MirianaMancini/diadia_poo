@@ -46,20 +46,13 @@ public class StanzaMagica extends Stanza {
 		nomeInvertito = nomeInvertito.reverse();
 		attrezzo = new Attrezzo(nomeInvertito.toString(), pesoDoppio);
 		return attrezzo;
-		
-//		StringBuffer nomeInvertito;
-//		int pesoDoppio = attrezzo.getPeso()*2;
-//		nomeInvertito = new StringBuffer(attrezzo.getNome());
-//		nomeInvertito = nomeInvertito.reverse();
-//		attrezzo = new Attrezzo(nomeInvertito.toString(), pesoDoppio);
-//		return attrezzo;
 	}
 	
 	@Override
 	public boolean addAttrezzo(Attrezzo attrezzo) {
 		this.contatoreAttrezziPosati++;
 		if(this.contatoreAttrezziPosati==this.getSogliaMagica())
-			System.out.println("COMPORTAMENTO MAGICO DELLA STANZA ATTIVATO!");
+			System.out.println("COMPORTAMENTO MAGICO DELLA STANZA "+ this.getNome() +" ATTIVATO!");
 		
 		if (magiaAttivata()) {
 			attrezzo = this.modificaAttrezzo(attrezzo);

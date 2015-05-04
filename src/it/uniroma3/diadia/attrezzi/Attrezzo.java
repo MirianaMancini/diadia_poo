@@ -54,8 +54,16 @@ public class Attrezzo {
    
    @Override
    public boolean equals(Object o){
-	   Attrezzo attrezzo = (Attrezzo) o;
-	   return this.getNome().equals(attrezzo.getNome()) && this.getPeso()==attrezzo.getPeso();
+	   Attrezzo that = (Attrezzo) o;
+	   return this.getNome().equals(that.getNome());   	//&& this.getPeso()==that.getPeso();
+	
+	   //poichè non possono esistere due attrezzi con lo stesso nome per l'unicità delle chiavi
+	   //allora è sufficiente verificare l'uguaglianza dei nomi
+   }												  	
+   
+   @Override
+   public int hashCode() {
+	   return this.getNome().hashCode();  
    }
 
 }

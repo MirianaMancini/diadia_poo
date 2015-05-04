@@ -25,7 +25,7 @@ public class Labirinto {
 		
 		/* crea stanze del labirinto */
 		Stanza atrio = new StanzaBloccata("Atrio", "nord", "chiave");
-		Stanza aulaN11 = new StanzaMagica("Aula N11", 2);	//AULA N11 E' LA STANZA MAGICA con soglia default
+		Stanza aulaN11 = new StanzaMagica("Aula N11", 2);	//AULA N11 E' LA STANZA MAGICA con soglia 2
 		Stanza aulaN10 = new StanzaBuia("Aula N10", "lanterna");	//AULA N10 E' LA STANZA BUIA  
 		Stanza laboratorio = new Stanza("Laboratorio Campus");	
 		Stanza biblioteca = new Stanza("Biblioteca");

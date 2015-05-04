@@ -1,12 +1,24 @@
 package it.uniroma3.diadia.giocatore;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.attrezzi.ComparatoreAttrezziPerNome;
+import it.uniroma3.diadia.attrezzi.ComparatoreAttrezziPerPeso;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 
 public class Borsa {
 	public final static int DEFAULT_PESO_MAX_BORSA = 10;
-	private Attrezzo[] attrezzi;
-	private int numeroAttrezzi;
-	private int pesoMax;			//peso max supportato dalla borsa
+	
+	private Map<String, Attrezzo> attrezzi;			//MAPPA: array associativo per nome dell'attrezzo
+	private int pesoMax;							//peso max supportato dalla borsa
 	
 	/**
 	 * Costruttore che imposta tutte la variabili d'istanza in default
@@ -21,8 +33,7 @@ public class Borsa {
 	 */
 	public Borsa(int pesoMax) {				
 		this.pesoMax = pesoMax;
-		this.attrezzi = new Attrezzo[10]; // speriamo che bastino...
-		this.numeroAttrezzi = 0;
+		this.attrezzi = new HashMap<String,Attrezzo>();		
 	}
 	
 	
@@ -31,10 +42,16 @@ public class Borsa {
 	 * @return peso corrente della borsa
 	 */
 	public int getPeso() {
+		//Il ciclo non può essere tolto poichè abbiamo la necessità di conoscere tutti gli attrezzi
 		int peso = 0;
-		for(Attrezzo attrezzo : attrezzi){
-			if(attrezzo!=null)
-				peso += attrezzo.getPeso();
+		//Non è possibile iterare una Mappa
+		/*Iteriamo l'insieme delle chiavi e usiamo get per ottenere i valori= Attrezzi)*/
+		Set<String> nomiAttrezzi = this.attrezzi.keySet();
+		for(String nome : nomiAttrezzi){
+			if(nome!=null){
+				Attrezzo a = this.attrezzi.get(nome);
+				peso += a.getPeso();
+			}
 		}
 		return peso;
 	}
@@ -46,49 +63,44 @@ public class Borsa {
 	public int getPesoMax() {
 		return pesoMax;
 	}
-		
+	
+	/**
+	 * Ritorna il numero di attrezzi presenti nella Borsa
+	 * @return numero attrezzi
+	 */
+	public int numeroAttrezzi() {
+		return this.attrezzi.size();
+	}
+
 	
 	/**
 	 * Verifica se la borsa è vuota
 	 * @return true se la borsa non ha attrezzi
 	 */
 	public boolean isEmpty() {
-		return this.numeroAttrezzi == 0;
+		return this.numeroAttrezzi()==0;	
 	}
-	
-	/**
-	 * Metodo privato che restituisce la posizione dell Attrezzo cercato nella Borsa nell' array attrezzi
-	 */
-	private int trovaIndiceAttrezzo(String nomeAttrezzo) {
-		for(int i=0; i<this.numeroAttrezzi; i++){
-			if(this.attrezzi[i].getNome().equals(nomeAttrezzo))
-    			return i;
-     	}
-    	return -1;
-    }
+
 	
 	/**
 	 * Restituisce un attrezzo dalla borsa
-	 * @param nomeAttrezzo
-	 * @return attrezzo richiesto
+	 * @param nomeAttrezzoCercato
+	 * @return attrezzo richiesto, oppure null se l'attrezzo non è presente nella borsa
 	 */
-	public Attrezzo getAttrezzo(String nomeAttrezzo) {
-		Attrezzo a = null;
-		int indiceAttrezzoCercato = this.trovaIndiceAttrezzo(nomeAttrezzo);
-		if(indiceAttrezzoCercato != -1)
-			a = this.attrezzi[indiceAttrezzoCercato];
-		return a;
-	}
+	public Attrezzo getAttrezzo(String nomeAttrezzoCercato) {
+		return this.attrezzi.get(nomeAttrezzoCercato);
+	}	
+
 	
 	/**
 	 * Verifica se la borsa contiene l'attrezzo richiesto
 	 * @param nomeAttrezzo
-	 * @return true se l'attrezzo è presente nella borsa
+	 * @return true se l'attrezzo è presente nella borsa, false altrimenti
 	 */
 	public boolean hasAttrezzo(String nomeAttrezzo) {
-		//return this.getAttrezzo(nomeAttrezzo)!=null;
-		return (this.trovaIndiceAttrezzo(nomeAttrezzo)) != -1;
+		return (this.getAttrezzo(nomeAttrezzo) != null);
 	}
+
 	
 	/**
 	 * Aggiunge un attrezzo alla borsa
@@ -100,47 +112,20 @@ public class Borsa {
 			System.out.println("Non è possibile prendere l'attrezzo! (la borsa non supporta il suo peso)");
 			return false;
 		}
-		
-		if (this.numeroAttrezzi==10)
-			return false;
-		this.attrezzi[this.numeroAttrezzi] = attrezzo;
-		this.numeroAttrezzi++;
+		this.attrezzi.put(attrezzo.getNome(), attrezzo);	//se l'attrezzo già esiste viene aggiornato il suo peso
 		return true;
 	}
 	
 	
 	/**
 	 * Rimuove un attrezzo dall'array di Attrezzi (ricerca in base al nome) e lo restiuisce
-	 * @param nomeAttrezzo
-	 * @return Attrezzo rimosso
+	 * @param String nomeAttrezzoDaRimuovere
+	 * @return Attrezzo rimosso, oppure null se l'attrezzo da rimuovere non è presente nella borsa
 	 */
-	public Attrezzo removeAttrezzo(String nomeAttrezzo) {
-		Attrezzo a =null;
-		for(int i=0; i<this.numeroAttrezzi;i++){
-			if(this.attrezzi[i].getNome().equals(nomeAttrezzo))	{
-				a = this.attrezzi[i];							//è l'attrezzo da rimuovere e restituire
-				for(i++; i<this.numeroAttrezzi; i++){			//eliminare l'attrezzo in posizione i
-					this.attrezzi[i-1] = this.attrezzi[i];					
-				}
-				this.numeroAttrezzi--;
-				this.attrezzi[numeroAttrezzi] = null;
-			}
-		}
-		return a;
+	public Attrezzo removeAttrezzo(String nomeAttrezzoDaRimuovere) {
+		return this.attrezzi.remove(nomeAttrezzoDaRimuovere);
 	}
-		
-		
-//		Attrezzo attrezzoDaRimuovere = null;				//presupponiamo che non c'è
-//		
-//		int indiceAttrezzoDaRimuovere = this.trovaIndiceAttrezzo(nomeAttrezzo);
-//    	if(indiceAttrezzoDaRimuovere!=-1) {		//se l'elemento è presente nella borsa
-//    		attrezzoDaRimuovere = this.attrezzi[indiceAttrezzoDaRimuovere];
-//    		this.attrezzi[indiceAttrezzoDaRimuovere] = this.attrezzi[this.numeroAttrezzi-1];
-//    		this.numeroAttrezzi--;
-//    	}
-//    	return attrezzoDaRimuovere;
 
-	
 	
 	/**
 	 * Ritorna una descrizione della borsa
@@ -150,12 +135,67 @@ public class Borsa {
 		StringBuilder s = new StringBuilder();
 		if (!this.isEmpty()) {
 			s.append("Contenuto borsa ("+this.getPeso()+"kg/"+this.getPesoMax()+"kg): ");
-			for (int i= 0; i<this.numeroAttrezzi; i++)
-				s.append(attrezzi[i].toString()+" ");
+			List<Attrezzo> lista = this.getContenutoOrdinatoPerPeso();
+			for(Attrezzo a : lista){
+				if(a!=null)
+					s.append(a.toString()+" ");
+			}
 		}
 		else
 			s.append("Borsa vuota");
 		return s.toString();
 	}
-
+	
+	
+	/**
+	 * Metodo che prende la lista degli attrezzi contenuti nella borsa e la resituisce ordinata per peso
+	 */
+	public List<Attrezzo> getContenutoOrdinatoPerPeso() {
+		Collection<Attrezzo> valori = this.attrezzi.values();
+		List<Attrezzo> attrezzi = new ArrayList<>(valori);
+		Collections.sort(attrezzi, new ComparatoreAttrezziPerPeso());
+		return attrezzi;
+	}
+	
+	
+	
+	/**
+	 * Metodo che restituisce la lista degli attrezzi nella borsa ordinati per nome
+	 */
+	public List<Attrezzo> getContenutoOrdinatoPerNome() {
+		Collection<Attrezzo> valori = this.attrezzi.values();
+		List<Attrezzo> attrezzi = new ArrayList<>(valori);		//costruttore sovraccarico
+		
+		Collections.sort(attrezzi, new ComparatoreAttrezziPerNome());
+		return attrezzi;
+	}
+	
+	/**
+	 * Metodo che restituisce una mappa che associa ad un intero un insieme
+	 * (comunque non vuoto) di attrezzi: tutti gli attrezzi nell'insieme 
+	 * hanno lo stesso peso ed è pari all'intero che figura come chiave nella mappa
+	 * 
+	 */
+	public Map<Integer,Set<Attrezzo>> getContenutoRaggruppatoPerPeso() {
+		Collection<Attrezzo> valori = this.attrezzi.values();
+		List<Attrezzo> lista_attrezzi = new ArrayList<>(valori);  //lista degli attrezzi da riorganizzare
+		
+		Set<Attrezzo> tmp;									
+		Map<Integer, Set<Attrezzo>> mappa = new HashMap<>();	//Ok: Integer default equals e hashCode
+		
+		for(Attrezzo attrezzo : lista_attrezzi) {
+			if(mappa.containsKey(attrezzo.getPeso())){
+				//Set associato a questo peso già esiste - allora me la faccio restituire da get
+				tmp = mappa.get(attrezzo.getPeso());
+				tmp.add(attrezzo);
+			}
+			else {
+				//Set associato a questo peso ancora non esiste
+				tmp = new HashSet<Attrezzo>();			//OK: Attrezzo implementa equals e hashCode
+				tmp.add(attrezzo);
+				mappa.put(attrezzo.getPeso(), tmp);
+			}
+		}
+		return mappa;
+	}
 }

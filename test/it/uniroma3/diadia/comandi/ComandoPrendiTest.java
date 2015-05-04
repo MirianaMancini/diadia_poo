@@ -35,5 +35,19 @@ public class ComandoPrendiTest {
 		assertFalse(this.partita.getStanzaCorrente().hasAttrezzo("mantello"));
 		assertTrue(this.partita.getBorsaGiocatore().hasAttrezzo("mantello"));
 	}
+	
+	@Test
+	public void testEseguiPrendi_AttrezzoNonPresente() {
+		Attrezzo spada = new Attrezzo("spada", 4);
+		this.partita.getBorsaGiocatore().addAttrezzo(spada);
+		assertFalse(this.partita.getStanzaCorrente().hasAttrezzo("spada"));
+		assertTrue(this.partita.getBorsaGiocatore().hasAttrezzo("spada"));
+		//l'attrezzo è nella borsa del giocatore perciò non può essere prese dalla stanza
+		FabbricaDiComandi factory = new FabbricaDiComandiSemplice();
+		Comando comando = factory.costruisciComando("prendi spada");
+		comando.esegui(this.partita);
+		assertFalse(this.partita.getStanzaCorrente().hasAttrezzo("spada"));
+		assertTrue(this.partita.getBorsaGiocatore().hasAttrezzo("spada"));
+	}
 
 }

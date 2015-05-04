@@ -16,6 +16,7 @@ public class ComandoPrendi implements Comando {
 	public void esegui(Partita partita) {
 		if( !(partita.getStanzaCorrente().hasAttrezzo(nomeAttrezzo)) ) {	//se l'attrezzo non è presente
     		System.out.println("Attrezzo non presente nella stanza!");
+    		return;
       	}
     	//l'attrezzo è presente nella stanza
     	Stanza corrente = partita.getStanzaCorrente();
@@ -24,10 +25,12 @@ public class ComandoPrendi implements Comando {
 		
     	//i metodi addAttrezzo di Borsa e removeAttrezzo di Stanza effettuano l'operazione
     	//richiesta e restituiscono true se è avvenuta con successo
-    	if(borsaGiocatore.addAttrezzo(daPrendere) && corrente.removeAttrezzo(daPrendere)){
-    		System.out.println("Attrezzo Preso!");
-    		System.out.println(borsaGiocatore.toString());
-       	}
+    	if(daPrendere!=null){
+    		if(borsaGiocatore.addAttrezzo(daPrendere) && corrente.removeAttrezzo(daPrendere)){
+    			System.out.println("Attrezzo Preso!");
+    			System.out.println(borsaGiocatore.toString());
+    		}
+    	}
     	
 	}
 

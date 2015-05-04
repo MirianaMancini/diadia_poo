@@ -2,6 +2,7 @@ package it.uniroma3.diadia.ambienti;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
+
 public class StanzaMagicaProtected extends Stanza {
 	private final static int SOGLIA_DEFAULT = 3;
 	private int contatoreAttrezziPosati;		
@@ -44,13 +45,9 @@ public class StanzaMagicaProtected extends Stanza {
 			attrezzo = this.modificaAttrezzo(attrezzo);
 			System.out.println("Magia Attivata su: "+attrezzo.getNome());
 		}
-		if (this.numeroAttrezzi < this.attrezzi.length) {
-			this.attrezzi[this.numeroAttrezzi] = attrezzo;
-			this.numeroAttrezzi++;
-			return true;
-		}
-		
-		else return false;
+		this.attrezzi.add(attrezzo);		//in stanzaProtected abbiamo dovuto introdurre questa modifica 
+											//dopo aver modificato stanza con List<Attrezzo>
+		return true;
 	}
 	
 	/**
